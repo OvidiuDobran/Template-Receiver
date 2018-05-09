@@ -19,18 +19,18 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class MainServerApp {
+public class TemplateReceiverApp {
 
 	public List<Problem> problems;
 	public List<Receiver> receivers;
 
-	public MainServerApp() {
+	public TemplateReceiverApp() {
 		problems = new ArrayList<Problem>();
 		receivers = new ArrayList<Receiver>();
 	}
 
 	public static void main(String[] args) {
-		MainServerApp app = ApplicationSession.getInstance().getApp();
+		TemplateReceiverApp app = ApplicationSession.getInstance().getApp();
 		app.run();
 	}
 
@@ -49,10 +49,11 @@ public class MainServerApp {
 	}
 
 	public void prepareToExit() {
-		//TODO this method should save all the data that are worked with
+		// TODO this method should save all the data that are worked with
 	}
 
 	public void getProblemsFromDB() {
+		// TODO http
 		Problem problem1 = new Problem((new Date()).toString(), new User("dobran_ovi@yahoo.com", "a_password_123"),
 				"pisica in copac", "45.749455", "21.231243", Status.NEW);
 		Problem problem2 = new Problem((new Date()).toString(), new User("app_client_user@yahoo.com", "a_password_123"),
@@ -70,14 +71,11 @@ public class MainServerApp {
 	}
 
 	public void getReceiversFromDB() {
+		// TODO http
 		receivers = new ArrayList<Receiver>();
 		receivers.add(new Receiver("Politie"));
 		receivers.add(new Receiver("Primarie"));
 		receivers.add(new Receiver("Pompieri"));
-	}
-
-	public void sentProblemToReceiver(Problem problem, Receiver receiver) {
-		// TODO some interactions with the DB
 	}
 
 	public Problem getProblemById(int id) {
@@ -99,7 +97,8 @@ public class MainServerApp {
 	}
 
 	public void solveProblem(Problem problem) {
-		//TODO in the DB, change the status of the given problem from AT_RECEIVER to HANDLED
+		// TODO in the DB, change the status of the given problem from AT_RECEIVER to
+		// HANDLED
 	}
-	
+
 }

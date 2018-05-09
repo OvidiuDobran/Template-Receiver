@@ -6,11 +6,11 @@ public class ApplicationSession {
 
 	private static ApplicationSession instance;
 	private GUIHandler guiHandler;
-	private MainServerApp app;
+	private TemplateReceiverApp app;
 
 	private ApplicationSession() {
 		setGuiHandler(new GUIHandler());
-		setApp(new MainServerApp());
+		setApp(new TemplateReceiverApp());
 	}
 
 	public GUIHandler getGuiHandler() {
@@ -32,11 +32,11 @@ public class ApplicationSession {
 		return instance;
 	}
 
-	public MainServerApp getApp() {
+	public TemplateReceiverApp getApp() {
 		return app;
 	}
 
-	public void setApp(MainServerApp app) {
+	public void setApp(TemplateReceiverApp app) {
 		this.app = app;
 	}
 
