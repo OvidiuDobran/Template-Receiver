@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mainserver.app.ApplicationSession;
+import com.mainserver.app.Receiver;
 
 public class GUIHandler {
 	private Display display;
@@ -39,7 +40,7 @@ public class GUIHandler {
 	}
 
 	public void run() {
-		shell.setText("Main Server");
+		shell.setText("Template Receiver");
 		shell.setLayout(new FormLayout());
 
 		contentPanel = new Composite(shell, SWT.BORDER);
@@ -56,7 +57,7 @@ public class GUIHandler {
 		dataContentPanel.top = new FormAttachment(0, 0);
 		dataContentPanel.right = new FormAttachment(100, 0);
 		dataContentPanel.left = new FormAttachment(0, 0);
-		dataContentPanel.bottom=new FormAttachment(100,-70);
+		dataContentPanel.bottom = new FormAttachment(100, -70);
 		contentPanel.setLayoutData(dataContentPanel);
 
 		exit = new Button(shell, SWT.NONE);
@@ -118,7 +119,17 @@ public class GUIHandler {
 			@Override
 			public void handleEvent(Event arg0) {
 				shell.close();
-				ApplicationSession.getInstance().getApp().prepareToExit();
+			}
+		});
+
+		welcomePage.typeCombo.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event arg0) {
+				String receiverName = welcomePage.typeCombo.getItem(welcomePage.typeCombo.getSelectionIndex());
+				Receiver receiverWithName = ApplicationSession.getInstance().getApp().getReceiverByName(receiverName);
+				ApplicationSession.getInstance().getApp().receiver=receiverWithName;
+				shell.setText(receiverWithName.getName());
 			}
 		});
 
@@ -128,20 +139,20 @@ public class GUIHandler {
 			public void handleEvent(Event arg0) {
 
 				if (layout.topControl == welcomePage) {
-					if(welcomePage.isItemSelected()) {
+					if (welcomePage.isItemSelected()) {
 						changeToPage(inboxPage);
 						inboxPage.refresh();
 						refresh.setEnabled(true);
 						refresh.setVisible(true);
 						back.setEnabled(true);
 						back.setVisible(true);
-					}else {
+					} else {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 						messageBox.setText("Select a receiver");
 						messageBox.setMessage("You need to select a receiver to continue");
 						messageBox.open();
 					}
-					
+
 				} else if (layout.topControl == inboxPage) {
 					if (inboxPage.isItemSelected()) {
 						refresh.setEnabled(false);
@@ -157,23 +168,22 @@ public class GUIHandler {
 						messageBox.open();
 					}
 				} else if (layout.topControl == detailsPage) {
-						ApplicationSession.getInstance().getApp().solveProblem(detailsPage.getProblem());
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
-						messageBox.setText("Problem solved");
-						messageBox.setMessage("The problem was solved");
+					ApplicationSession.getInstance().getApp().solveProblem(detailsPage.getProblem());
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
+					messageBox.setText("Problem solved");
+					messageBox.setMessage("The problem was solved");
 
-						int buttonId = messageBox.open();
-						if (buttonId == SWT.OK) {
-							changeToPage(inboxPage);
-							next.setText("Next");
-							inboxPage.refresh();
-							refresh.setEnabled(true);
-							refresh.setVisible(true);
-							back.setEnabled(true);
-							back.setVisible(true);
-						}
+					int buttonId = messageBox.open();
+					if (buttonId == SWT.OK) {
+						changeToPage(inboxPage);
+						next.setText("Next");
+						inboxPage.refresh();
+						refresh.setEnabled(true);
+						refresh.setVisible(true);
+						back.setEnabled(true);
+						back.setVisible(true);
+					}
 
-					
 				}
 			}
 		});

@@ -23,6 +23,7 @@ public class TemplateReceiverApp {
 
 	public List<Problem> problems;
 	public List<Receiver> receivers;
+	public Receiver receiver;
 
 	public TemplateReceiverApp() {
 		problems = new ArrayList<Problem>();
@@ -48,34 +49,20 @@ public class TemplateReceiverApp {
 		}
 	}
 
-	public void prepareToExit() {
-		// TODO this method should save all the data that are worked with
-	}
-
 	public void getProblemsFromDB() {
-		// TODO http
-		Problem problem1 = new Problem((new Date()).toString(), new User("dobran_ovi@yahoo.com", "a_password_123"),
-				"pisica in copac", "45.749455", "21.231243", Status.NEW);
-		Problem problem2 = new Problem((new Date()).toString(), new User("app_client_user@yahoo.com", "a_password_123"),
-				"pisica in copac", "45.749455", "21.231243", Status.NEW);
-		Problem problem3 = new Problem((new Date()).toString(), new User("app_client_user@yahoo.com", "a_password_123"),
-				"pisica in copac", "45.749455", "21.231243", Status.NEW);
-		Problem problem4 = new Problem((new Date()).toString(), new User("app_client_user@yahoo.com", "a_password_123"),
-				"pisica in copac", "45.749455", "21.231243", Status.NEW);
-
-		problems = new ArrayList<Problem>();
-		problems.add(problem1);
-		problems.add(problem2);
-		problems.add(problem3);
-		problems.add(problem4);
+		if (receiver != null) {
+			problems = ApplicationSession.getInstance().getPostHandler().getAllProblemsFromDB(receiver);
+		}
 	}
 
 	public void getReceiversFromDB() {
 		// TODO http
-		receivers = new ArrayList<Receiver>();
-		receivers.add(new Receiver("Politie"));
-		receivers.add(new Receiver("Primarie"));
-		receivers.add(new Receiver("Pompieri"));
+		/*
+		 * receivers = new ArrayList<Receiver>(); receivers.add(new
+		 * Receiver("Politie")); receivers.add(new Receiver("Primarie"));
+		 * receivers.add(new Receiver("Pompieri"));
+		 */
+		receivers = ApplicationSession.getInstance().getPostHandler().getReceiversFromDB();
 	}
 
 	public Problem getProblemById(int id) {
@@ -99,6 +86,7 @@ public class TemplateReceiverApp {
 	public void solveProblem(Problem problem) {
 		// TODO in the DB, change the status of the given problem from AT_RECEIVER to
 		// HANDLED
+		ApplicationSession.getInstance().getPostHandler().solveProblem(problem);
 	}
 
 }

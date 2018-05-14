@@ -11,10 +11,20 @@ public class Problem {
 	private Receiver receiver;
 	private static int idGenerated=0;;
 
-	public Problem(String string, User user, String description, String longitude, String latitude, Status status) {
-		setId(idGenerated++);
+	public Problem(String date, User user, String description, String longitude, String latitude, Status status) {
 		this.status = status;
-		this.setDate(string);
+		this.setDate(date);
+		this.user = user;
+		this.description = description;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.receiver=null;
+	}
+	
+	public Problem(int id, String date, User user, String description, String longitude, String latitude, Status status) {
+		setId(id);
+		this.status = status;
+		this.setDate(date);
 		this.user = user;
 		this.description = description;
 		this.latitude = latitude;

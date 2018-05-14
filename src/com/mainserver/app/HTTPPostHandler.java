@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ovi on 5/9/2018.
@@ -85,5 +87,91 @@ public class HTTPPostHandler {
 		} catch (IOException ex) {
 
 		}
+	}
+
+	public List<Problem> getAllProblemsFromDB(Receiver receiver) {
+
+		List<Problem> problems = new ArrayList<Problem>();
+		String result = post("getAllProblemsForReceiver", "Data=Name=" + receiver.//
+				getName());
+		System.err.println(result);
+		if (result.contains("[")) {
+			result = result.substring(result.indexOf("["));
+			String results[] = result.split("},");
+			for (int i = 0; i < results.length; i++) {
+				System.out.println(results[i]);
+				String recs[] = results[i].split(",");
+				/*
+				 * for (String s:recs) { System.out.println(s); }
+				 */
+				for (int j = 0; j < recs.length; j++) {
+					recs[j] = recs[j].substring(recs[j].indexOf(":") + 1);
+					if (recs[j].contains("\"")) {
+						recs[j] = recs[j].substring(recs[j].indexOf("\"") + 1, recs[j].length() - 1);
+					}
+					if (recs[j].contains("}")) {
+						recs[j] = recs[j].substring(0, recs[j].indexOf("}"));
+					}
+					System.out.println(recs[j]);
+				}
+
+				User user = getUserById(Integer.parseInt(recs[1]));
+
+				Problem problem = new Problem(Integer.parseInt(recs[0]), recs[4], user, recs[3], recs[5], recs[6],
+						Status.NEW);
+				problems.add(problem);
+
+			}
+		}
+		return problems;
+	}
+
+	private User getUserById(int userId) {
+		String result = post("getUserById", "Data=UserId=" + userId);
+		System.out.println(result);
+		String[] results = result.substring(result.indexOf("{")).split(",");
+		System.out.println(results[0]);
+		int id = Integer.parseInt(results[0].substring(results[0].indexOf("Id") + 4).trim());
+		String email = results[1].substring(results[1].indexOf(":") + 1);
+		email = email.substring(email.indexOf("\"") + 1, email.length() - 1);
+		String password = results[2].substring(results[2].indexOf(":") + 1);
+		password = password.substring(password.indexOf("\"") + 1, password.length() - 1);
+		return new User(id, email, password);
+	}
+
+	public void solveProblem(Problem problem) {
+		post("solveProblem", "Data=ProblemId=" + problem.getId());
+	}
+
+	public List<Receiver> getReceiversFromDB() {
+		List<Receiver> receivers = new ArrayList<Receiver>();
+		String result = post("getReceivers", "");
+		System.out.println(result);
+
+		result = result.//
+				substring(result.indexOf("["));
+		String results[] = result.split("},");
+		for (int i = 0; i < results.length; i++) {
+			System.out.println(results[i]);
+			String recs[] = results[i].split(",");
+			/*
+			 * for (String s:recs) { System.out.println(s); }
+			 */
+			for (int j = 0; j < recs.length; j++) {
+				recs[j] = recs[j].substring(recs[j].indexOf(":") + 1);
+				if (recs[j].contains("\"")) {
+					recs[j] = recs[j].substring(recs[j].indexOf("\"") + 1, recs[j].length() - 1);
+				}
+				if (recs[j].contains("}")) {
+					recs[j] = recs[j].substring(0, recs[j].indexOf("}"));
+				}
+				System.out.println(recs[j]);
+			}
+
+			Receiver receiver = new Receiver(Integer.parseInt(recs[0]), recs[1]);
+			receivers.add(receiver);
+
+		}
+		return receivers;
 	}
 }

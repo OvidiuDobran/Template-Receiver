@@ -14,7 +14,9 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.mainserver.app.ApplicationSession;
@@ -22,7 +24,7 @@ import com.mainserver.app.Receiver;
 
 public class WelcomePage extends MyComposite implements Refreshable {
 
-	private Combo typeCombo;
+	public Combo typeCombo;
 
 	public WelcomePage(Composite parent, int style) {
 		super(parent, style);
@@ -57,6 +59,8 @@ public class WelcomePage extends MyComposite implements Refreshable {
 		typeComboData.top = new FormAttachment(welcome, 20);
 		typeComboData.left = new FormAttachment(typeLabel, 10);
 		typeCombo.setLayoutData(typeComboData);
+		
+		
 	}
 
 	@Override
